@@ -172,3 +172,27 @@ html, body {
     cursor:move;
     background-color: rgba(255,255,255,0.4);
 }
+
+.employee-name {
+	font-size: 12px;
+	background-color: rgba(0,138,255,.5);
+	position:absolute;
+	right:28px;
+	padding-right:5px;
+	padding-left:5px;
+	border-radius:4px;
+	text-indent: 0 !important;
+}
+
+.task-status-icon {
+	position:absolute;
+	right:3px;
+}
+
+.complete {
+	color:lime;
+}
+
+.pending {
+	color:yellow;
+}

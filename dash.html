@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <title>Home Board</title>
     <link type="text/css" href="css/dash.css" rel="stylesheet">
+	<link type="text/css" href="css/simplebar.css" rel="stylesheet">
+	<link type="text/css" href="css/font-awesome.min.css" rel="stylesheet">
+	<script src="js/external-js/jquery-3.0.0.js"></script>
+	<script src="js/external-js/simplebar.js"></script>
+	<script src="js/dash.js"></script>
+	<script src="js/task-manager.js"></script>
 </head>
 <body>
 <div id="container">
@@ -15,19 +21,32 @@
         <div id="Project-Tasker" class="content-window">
             <div class="employee-list-div noselect">
                 <ul class="employee-list">
-                    <li class="employee-list-item">Abinadi Cordova</li>
-                    <li class="employee-list-item">Yasman Romani</li>
-                    <li class="employee-list-item">Kit Gardner</li>
+                    <li class="employee-list-item employee-target">Abinadi Cordova</li>
+                    <li class="employee-list-item employee-target">Yasman Romani</li>
+                    <li class="employee-list-item employee-target">Kit Gardner</li>
                 </ul>
             </div>
             <div class="task-list-div noselect">
                 <ul class="task-list">
-                    <li class="task-list-item">Play 40 hours of a FPS</li>
-                    <li class="task-list-item">Fix something in the code</li>
+                    <li class="task-list-item draggable"><span>Play 40 hours of a FPS and then get back to me on how it went as well as if this task word-wrapped itself.</span><span class="employee-name">Yasman Romani</span><i class="fa fa-check task-status-icon complete"></i></li>
+                    <li class="task-list-item draggable"><span>Fix something in the code</span><span class="employee-name">Abinadi Cordova</span><i class="fa fa-clock-o task-status-icon pending"></i></li>
+					<li class="task-list-item draggable"><span>Make this stuff look better and more functional</span></li>
                 </ul>
             </div>
         </div>
     </ul>
 </div>
+<script>
+	$(document).ready(function(){
+		$(init);
+		function init(){
+			$('.draggable').draggable({
+			cursor: 'move',
+			containment: 'document',
+			helper: 'clone'
+		});
+		}
+	});
+</script>
 </body>
 </html>
