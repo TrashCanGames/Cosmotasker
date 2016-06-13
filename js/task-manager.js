@@ -74,6 +74,7 @@ var response = {
 		}
 	]
 }
+var employees = ["Unassigned", "Abinadi Cordova", "Yasman Romani", "Kit Gardner"];
 
 function addTaskEventListeners(){
 	taskListItems = document.getElementsByClassName("task-list-item");
@@ -115,9 +116,6 @@ function setTaskEdit(e){
 	offY = $(this).offset().top;
 	offXX = $(this).position().left;
 	offYY = $(this).position().top;
-	console.log("offset x: " + offX + " " + offXX + ", offset y: " + offY);
-	console.log("offset x: " + e.clientX + ", offset y: " + e.clientY);
-	console.log("offset x: " + e.pageX + ", offset y: " + e.pageY);
 	createContext(((e.pageX - offX) + offXX) - 35, ((e.pageY - offY) + offYY) - 5, e.target);
 }
 function createContext(x, y, parent){
@@ -130,7 +128,7 @@ function createContext(x, y, parent){
 	list.style.top = y + 'px';
 	var editBtn = document.createElement("li");
 	editBtn.setAttribute("class", "taskEditBtn");
-	editBtn.innerHTML = "Edit Task";
+	editBtn.innerHTML = "<i class='fa fa-edit'></i> Edit";
 	list.appendChild(editBtn);
 	parent.appendChild(list);
 	
@@ -142,6 +140,166 @@ function removeThings(e){
 	}
 }
 function openTask(e){
-	console.log("opening task");
+	editTaskWindow();
 }
-window.onload = function(){ addTaskEventListeners(); };
+function editTaskWindow(){
+	var parent = document.getElementById("container");
+	var window1 = document.createElement("div");
+	window1.className = "edit-task-window";
+	var title = document.createElement("div");
+	title.className = "window-title";
+	title.innerHTML = "Create/Edit Task"
+	var body = document.createElement("div");
+	body.className = "task-body";
+	var select = document.createElement("select");
+	select.className = "task-assignee";
+	var text = document.createElement("textarea");
+	text.className = "task-text";
+	var save = document.createElement("div");
+	save.className = "task-edit-btns";
+	save.innerHTML = "Save";
+	var del = document.createElement("div");
+	del.className = "task-edit-btns";
+	del.innerHTML = "Delete";
+	var close = document.createElement("div");
+	close.className = "task-edit-btns";
+	close.innerHTML = "Close";
+	
+	for(i = 0; i < employees.length; i++){
+		var option = document.createElement("option");
+		option.className = "task-assignee-option";
+		option.innerHTML = employees[i];
+		select.appendChild(option);
+	}
+	
+	body.appendChild(select);
+	body.appendChild(text);
+	body.appendChild(save);
+	body.appendChild(del);
+	body.appendChild(close);
+	window1.appendChild(title);
+	window1.appendChild(body);
+	parent.appendChild(window1);
+	
+	enableTaskBtns();
+}
+function enableTaskBtns(){
+	var taskbtns = document.getElementsByClassName("task-edit-btns");
+	for(i = 0; i < taskbtns.length; i++){
+		taskbtns[i].addEventListener("click", processTask, true);
+	}
+}
+function processTask(e){
+	var type = e.target.innerHTML;
+	if(type == "Save"){
+		
+	} else if (type == "Delete"){
+		
+	} else if (type == "Close"){
+		$(".edit-task-window").remove();
+	}
+}
+function loadTaskManager(){
+	if(document.getElementById("Project-Tasker")){
+		$("#Project-Tasker").remove();
+	}
+	var mainBtns = document.getElementsByClassName("Dash-btn");
+	
+	mainBtns[3].innerHTML = "<i class='fa fa-plus taskMainBtns tmbplus'></i>";
+	mainBtns[5].innerHTML = "<i class='fa fa-check taskMainBtns tmbcheck'></i>";
+	mainBtns[7].innerHTML = "<i class='fa fa-trash taskMainBtns' tmbtrash></i>";
+	
+	var parent = document.getElementsByClassName("Dash-Buttons");
+	var taskMgrUL = document.createElement("div");
+	taskMgrUL.className = "content-window";
+	taskMgrUL.id = "Project-Tasker";
+	var empList = document.createElement("div");
+	empList.className = "employee-list-div";
+	var empListUL = document.createElement("ul");
+	empListUL.className = "employee-list";
+	var taskListDiv = document.createElement("div");
+	taskListDiv.className = "task-list-div";
+	var taskListUL = document.createElement("ul");
+	taskListUL.className = "task-list";
+	
+	for(i = 0; i < employees.length; i++){
+		var empListItem = document.createElement("li");
+		empListItem.className = "employee-list-item";
+		empListItem.innerHTML = employees[i];
+		if(i == 0){
+			empListItem.setAttribute("style", "background-color:rgba(255,255,255,0.6);");
+		}
+		empListUL.appendChild(empListItem);
+	}
+	
+	for(j = 0; j < response["Unassigned"].length; j++){
+		var taskListItem = document.createElement("li");
+		taskListItem.className = "task-list-item";
+		var taskListISpan = document.createElement("span");
+		taskListISpan.innerHTML = response["Unassigned"][j].task;
+		
+		taskListItem.appendChild(taskListISpan);
+		if(response["Unassigned"][j].status != "unassigned"){
+			var stats = "";
+			if(response["Unassigned"][j].status == "complete"){
+				stats = "check";
+			} else {
+				stats = "clock-o";
+			}
+			var statusIcon = document.createElement("i");
+			statusIcon.className = "fa fa-" + stats + " task-status-icon " + response["Unassigned"][j].status;
+			
+			taskListItem.appendChild(statusIcon);
+		}
+		taskListUL.appendChild(taskListItem);
+	}
+	
+	empList.appendChild(empListUL);
+	taskListDiv.appendChild(taskListUL);
+	taskMgrUL.appendChild(empList);
+	taskMgrUL.appendChild(taskListDiv);
+	parent[0].appendChild(taskMgrUL);
+	
+	var names = document.getElementsByClassName("employee-list-item");
+	
+	for (k = 0; k < names.length; k++){
+		names[k].addEventListener("click", changeTasksList, true);
+	}
+	addTaskEventListeners();
+}
+function changeTasksList(e){
+	var parent = document.getElementsByClassName("task-list")[0];
+	parent.innerHTML = "";
+	var names = $(".employee-list-item");
+	var name = e.target.innerHTML;
+	
+	for(i = 0; i < names.length; i++){
+		names[i].removeAttribute("style");
+	}
+	
+	e.target.setAttribute("style", "background-color: rgba(255,255,255,0.6);");
+	
+	for(j = 0; j < response[name].length; j++){
+		var taskListItem = document.createElement("li");
+		taskListItem.className = "task-list-item";
+		var taskListISpan = document.createElement("span");
+		taskListISpan.innerHTML = response[name][j].task;
+		
+		taskListItem.appendChild(taskListISpan);
+		if(response[name][j].status != "unassigned"){
+			var stats = "";
+			if(response[name][j].status == "complete"){
+				stats = "check";
+			} else {
+				stats = "clock-o";
+			}
+			var statusIcon = document.createElement("i");
+			statusIcon.className = "fa fa-" + stats + " task-status-icon " + response[name][j].status;
+			
+			taskListItem.appendChild(statusIcon);
+		}
+		parent.appendChild(taskListItem);
+	}
+	addTaskEventListeners();
+}
+//window.onload = function(){ loadTaskManager(); };
