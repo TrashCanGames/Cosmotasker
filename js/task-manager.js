@@ -75,6 +75,7 @@ var response = {
 	]
 }
 var employees = ["Unassigned", "Abinadi Cordova", "Yasman Romani", "Kit Gardner"];
+var selectedEmployee = "";
 
 function addTaskEventListeners(){
 	taskListItems = document.getElementsByClassName("task-list-item");
@@ -83,6 +84,12 @@ function addTaskEventListeners(){
 		taskListItems[i].addEventListener("contextmenu", setTaskEdit, true);
 	}
 	window.addEventListener("click", removeThings, false);
+}
+function addMainTaskEventListeners(){
+	var buttons = document.getElementsByClassName("taskMainBtns");
+	for(i = 0; i < buttons.length; i++){
+		buttons[i].addEventListener("mousedown", mainTaskBtnPress, false);
+	}
 }
 function setTaskSelect(e){
 	var selected = false;
@@ -209,6 +216,8 @@ function loadTaskManager(){
 	mainBtns[5].innerHTML = "<i class='fa fa-check taskMainBtns tmbcheck'></i>";
 	mainBtns[7].innerHTML = "<i class='fa fa-trash taskMainBtns' tmbtrash></i>";
 	
+	addMainTaskEventListeners();
+	
 	var parent = document.getElementsByClassName("Dash-Buttons");
 	var taskMgrUL = document.createElement("div");
 	taskMgrUL.className = "content-window";
@@ -228,6 +237,7 @@ function loadTaskManager(){
 		empListItem.innerHTML = employees[i];
 		if(i == 0){
 			empListItem.setAttribute("style", "background-color:rgba(255,255,255,0.6);");
+			selectedEmployee = employees[i];
 		}
 		empListUL.appendChild(empListItem);
 	}
@@ -235,6 +245,7 @@ function loadTaskManager(){
 	for(j = 0; j < response["Unassigned"].length; j++){
 		var taskListItem = document.createElement("li");
 		taskListItem.className = "task-list-item";
+		taskListItem.id = response["Unassigned"][j].id;
 		var taskListISpan = document.createElement("span");
 		taskListISpan.innerHTML = response["Unassigned"][j].task;
 		
@@ -278,10 +289,12 @@ function changeTasksList(e){
 	}
 	
 	e.target.setAttribute("style", "background-color: rgba(255,255,255,0.6);");
+	selectedEmployee = name;
 	
 	for(j = 0; j < response[name].length; j++){
 		var taskListItem = document.createElement("li");
 		taskListItem.className = "task-list-item";
+		taskListItem.id = response[name][j].id;
 		var taskListISpan = document.createElement("span");
 		taskListISpan.innerHTML = response[name][j].task;
 		
@@ -301,5 +314,48 @@ function changeTasksList(e){
 		parent.appendChild(taskListItem);
 	}
 	addTaskEventListeners();
+}
+function mainTaskBtnPress(e){
+	if($(e.target).hasClass("fa-plus")){
+		editTaskWindow();
+	} else if ($(e.target).hasClass("fa-check")){
+		if(selectedTasks.length == 0 || checkForSelectedTasks() == false){
+			alert("No task selected!");
+		} else {
+			alert("Changed tasks to complete");
+		}
+	} else if ($(e.target).hasClass("fa-trash")){
+		if(selectedTasks.length == 0 || checkForSelectedTasks() == false){
+			alert("No task selected!");
+		} else {
+			alert("Deleted task.");
+		}
+	}
+}
+function checkForSelectedTasks(){
+	for(i = 0; i < selectedTasks.length; i++){
+		if(selectedTasks[i] != ""){
+			return true;
+		}
+	}
+	return false;
+}
+function removeMainBtnsEventL(){
+	if($(".taskMainBtns")){
+		var buttons = document.getElementsByClassName("taskMainBtns");
+		for(i = 0; i < buttons.length; i++){
+			buttons[i].removeEventListener("mousedown", mainTaskBtnPress, false);
+		}
+	}
+}
+function gotoHome(){
+	$(".content-window").remove();
+	removeMainBtnsEventL();
+	var mainBtns = document.getElementsByClassName("Dash-btn");
+	mainBtns[3].innerHTML = "<span>My Files</span>";
+	mainBtns[5].innerHTML = "<span>Calendar</span>";
+	mainBtns[7].innerHTML = "<span>Settings</span>";
+	
+	//enable home btn even listeners
 }
 //window.onload = function(){ loadTaskManager(); };
