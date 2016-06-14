@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 function gotoHome(){
     $(".content-window").remove();
     removeMainBtnsEventL();
@@ -9,10 +8,9 @@ function gotoHome(){
 
     //enable home btn even listeners
 }
-=======
 //Background Changer
 var bgID = 1;
-var bgChangeInterval = setInterval(function(){ bgTracker() }, 300000);
+var bgChangeInterval = setInterval(function(){ bgTracker() }, 120000);
 function bgTracker(){
 	if(bgID == 10){
 		bgID = 0;
@@ -20,4 +18,3 @@ function bgTracker(){
 	document.body.setAttribute("Style", "background-image: url('bg/" + bgID + ".jpg');");
 	bgID++;
 }
->>>>>>> origin/master

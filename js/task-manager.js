@@ -5,77 +5,91 @@ var selectLoc = 0;
 var offX;
 var offY;
 var response = {
-	"Unassigned":[
-		{
-			"id":"1",
-			"task":"Run with the wind until you become something other that what you are.",
-			"status":"unassigned"
-		},
-		{
-			"id":"2",
-			"task":"Play with your dad's gun and make sure he isn't home to catch you.",
-			"status":"unassigned"
-		},
-		{
-			"id":"3",
-			"task":"Catch a cold and let it go into the wild.",
-			"status":"unassigned"
-		}
-	],
-	"Abinadi Cordova":[
-		{
-			"id":"4",
-			"task":"Let the dogs out so you can inspire someone to make a song about you.",
-			"status":"complete"
-		},
-		{
-			"id":"5",
-			"task":"Recall the use of manequin heads for transport to Mars.",
-			"status":"pending"
-		},
-		{
-			"id":"6",
-			"task":"Silence the Lambs found out in the corn fields of the children.",
-			"status":"pending"
-		}
-	],
-	"Yasman Romani":[
-		{
-			"id":"7",
-			"task":"Turn out the lights and compact the little robot inside.",
-			"status":"pending"
-		},
-		{
-			"id":"8",
-			"task":"Feed the cows take them to a new level of enlightenment.",
-			"status":"complete"
-		},
-		{
-			"id":"9",
-			"task":"Try A, B, A, AB, A, CC",
-			"status":"pending"
-		}
-	],
-	"Kit Gardner":[
-		{
-			"id":"10",
-			"task":"Grow potatoes to feed the need to speed on the speed way.",
-			"status":"pending"
-		},
-		{
-			"id":"11",
-			"task":"Ride the carousel on a pony too small that goes in circles.",
-			"status":"pending"
-		},
-		{
-			"id":"12",
-			"task":"Think about the way fish swim and catch a clown fish that is stuggling at life.",
-			"status":"complete"
-		}
-	]
-}
+    "Unassigned": [
+        {
+            "id": "1",
+            "task": "Run with the wind until you become something other that what you are.",
+            "status": "unassigned"
+        },
+        {
+            "id": "2",
+            "task": "Play with your dad's gun and make sure he isn't home to catch you.",
+            "status": "unassigned"
+        },
+        {
+            "id": "3",
+            "task": "Catch a cold and let it go into the wild.",
+            "status": "unassigned"
+        }
+    ],
+    "Abinadi Cordova": [
+        {
+            "id": "4",
+            "task": "Let the dogs out so you can inspire someone to make a song about you.",
+            "status": "complete"
+        },
+        {
+            "id": "5",
+            "task": "Recall the use of manequin heads for transport to Mars.",
+            "status": "pending"
+        },
+        {
+            "id": "6",
+            "task": "Silence the Lambs found out in the corn fields of the children.",
+            "status": "pending"
+        }
+    ],
+    "Yasman Romani": [
+        {
+            "id": "7",
+            "task": "Turn out the lights and compact the little robot inside.",
+            "status": "pending"
+        },
+        {
+            "id": "8",
+            "task": "Feed the cows take them to a new level of enlightenment.",
+            "status": "complete"
+        },
+        {
+            "id": "9",
+            "task": "Try A, B, A, AB, A, CC",
+            "status": "pending"
+        }
+    ],
+    "Kit Gardner": [
+        {
+            "id": "10",
+            "task": "Grow potatoes to feed the need to speed on the speed way.",
+            "status": "pending"
+        },
+        {
+            "id": "11",
+            "task": "Ride the carousel on a pony too small that goes in circles.",
+            "status": "pending"
+        },
+        {
+            "id": "12",
+            "task": "Think about the way fish swim and catch a clown fish that is stuggling at life.",
+            "status": "complete"
+        }
+    ]
+};
 var employees = ["Unassigned", "Abinadi Cordova", "Yasman Romani", "Kit Gardner"];
 var selectedEmployee = "";
+
+function ajaxReq(){
+	$.ajax({
+		url: 'http://localhost:3000',
+		data: '{"request": "TEST"}',
+		type: 'POST',
+		success: function(data){
+			response = jQuery.parseJSON(data);
+		},
+		error: function (xhr, status, error) {
+			console.log('Error: ' + error.message);
+		}
+	});
+}
 
 function addTaskEventListeners(){
 	taskListItems = document.getElementsByClassName("task-list-item");
@@ -207,6 +221,7 @@ function processTask(e){
 	}
 }
 function loadTaskManager(){
+	//ajaxReq();
 	if(document.getElementById("Project-Tasker")){
 		$("#Project-Tasker").remove();
 	}
