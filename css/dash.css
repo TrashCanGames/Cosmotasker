@@ -275,7 +275,7 @@ body {
     user-select: none;
 }
 
-.taskMainBtns {
+.taskMainBtns, .fileMainBtns {
 	font-size:38px !important;
 	color:white;
 	line-height:100px !important;
